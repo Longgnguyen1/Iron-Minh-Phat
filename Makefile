@@ -10,10 +10,10 @@ DOCKER_COMPOSE_FILE := compose.yaml
 
 # Build jar
 build:
-	./mvnw clean package -DskipTests
+	mvnw clean package -DskipTests
 
 tidy:
-	./mvnw -q -DskipTests validate
+	mvnw -q -DskipTests validate
 
 up:
 	docker compose -f $(DOCKER_COMPOSE_FILE) up -d --remove-orphans
@@ -25,7 +25,7 @@ down:
 	docker compose -f $(DOCKER_COMPOSE_FILE) down
 
 run:
-	./mvnw spring-boot:run
+	mvnw spring-boot:run
 
 # -----------------------
 # Migration (Liquibase)
@@ -33,7 +33,7 @@ run:
 
 migrate-up: tidy
 	@echo "🚀 Chạy Liquibase update..."
-	./mvnw liquibase:update \
+	mvnw liquibase:update \
 		-Dliquibase.url="$(LIQUIBASE_URL)" \
 		-Dliquibase.username="$(LIQUIBASE_USER)" \
 		-Dliquibase.password="$(LIQUIBASE_PASSWORD)" \
@@ -42,7 +42,7 @@ migrate-up: tidy
 
 migrate-down: tidy
 	@echo "⏪ Rollback 1 changeset..."
-	./mvnw liquibase:rollback \
+	mvnw liquibase:rollback \
 		-Dliquibase.url="$(LIQUIBASE_URL)" \
 		-Dliquibase.username="$(LIQUIBASE_USER)" \
 		-Dliquibase.password="$(LIQUIBASE_PASSWORD)" \
@@ -52,7 +52,7 @@ migrate-down: tidy
 
 migrate-drop: tidy
 	@echo "⚠️ XÓA TOÀN BỘ DATABASE..."
-	./mvnw liquibase:dropAll \
+	mvnw liquibase:dropAll \
 		-Dliquibase.url="$(LIQUIBASE_URL)" \
 		-Dliquibase.username="$(LIQUIBASE_USER)" \
 		-Dliquibase.password="$(LIQUIBASE_PASSWORD)"

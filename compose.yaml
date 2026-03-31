@@ -1,9 +1,7 @@
-
-
 services:
   mysql:
     image: mysql:8.0
-    container_name: ecommerce-mysql
+    container_name: minhphat-mysql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: ${MYSQL_DB}
@@ -12,7 +10,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - minhphat_mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -21,11 +19,11 @@ services:
 
   redis:
     image: redis:7
-    container_name: ecommerce-redis
+    container_name: minhphat-redis
     ports:
       - "${REDIS_PORT}:6379"
     volumes:
-      - redis_data:/data
+      - minhphat_redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -34,7 +32,7 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: ecommerce-minio
+    container_name: minhphat-minio
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
@@ -43,14 +41,14 @@ services:
       - "${MINIO_PORT}:9000"
       - "${MINIO_CONSOLE_PORT}:9001"
     volumes:
-      - minio_data:/data
+      - minhphat_minio_data:/data
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ecommerce-app:latest
-    container_name: ecommerce-app
+    image: minhphat-app:latest
+    container_name: minhphat-app
     environment:
       SPRING_DATASOURCE_URL: ${LIQUIBASE_URL}
       SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
@@ -71,6 +69,6 @@ services:
     restart: on-failure
 
 volumes:
-  mysql_data:
-  redis_data:
-  minio_data:
+  minhphat_mysql_data:
+  minhphat_redis_data:
+  minhphat_minio_data:
